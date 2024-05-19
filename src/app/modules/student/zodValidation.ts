@@ -26,6 +26,7 @@ const LocalGuardianSchema = z.object({
 // Define the main student schema
 export const StudentSchemaZod = z.object({
   userId: z.string(),
+  password: z.string().min(7).max(10),
   name: UserNameSchema,
   gender: z.enum(["male", "female", "other"]),
   dateOfBirth: z.string().optional(),
@@ -39,6 +40,7 @@ export const StudentSchemaZod = z.object({
   localGuardian: LocalGuardianSchema,
   profileImg: z.string().optional(),
   isActive: z.enum(["active", "blocked"]),
+  isDeleted: z.boolean().optional(),
 });
 
 // Define a function to validate incoming data against the schema
@@ -46,6 +48,13 @@ export function validateStudent(data: any) {
   try {
     return StudentSchemaZod.parse(data);
   } catch (error) {
-    throw new Error(`Validation failed: ${error.errors}`);
+    if (error instanceof z.ZodError) {
+      const formattedErrors = error.errors.map(err => ({
+        path: err.path.join('.'),
+        message: err.message,
+      }));
+      throw new Error(`Validation failed: ${JSON.stringify(formattedErrors, null, 2)}`);
+    }
+    throw new Error("Unknown error occurred during validation");
   }
 }
