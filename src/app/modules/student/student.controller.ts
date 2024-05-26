@@ -1,7 +1,7 @@
 import e, { Request, Response } from "express";
 import { StudentServices } from "./student.service";
 import { StudentSchemaZod } from "./studentZodValidation";
-import { studentSchemaJoi } from "./studentJoiValidation";
+
 
 const createStudent = async (req: Request, res: Response) => {
   try {
