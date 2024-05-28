@@ -7,8 +7,8 @@ import {
   TUserName,
   studentModel,
 } from "./student.interface";
-import bcrypt from "bcrypt";
-import config from "../../config";
+
+
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -102,11 +102,7 @@ const studentSchema = new Schema<TStudent, studentModel>(
       unique: true,
       ref: "User"
     },
-    password: {
-      type: String,
-      required: [true, "Password is required"],
-      trim: true,
-    },
+    
     name: {
       type: userNameSchema,
       required: [true, "Student name is required"],
@@ -188,32 +184,9 @@ studentSchema.statics.isUserExist = async function (id: string) {
   return existingUser;
 };
 
-//  custom instance method
-// studentSchema.methods.isUserExits = async function (id: string) {
-//   const existingUser = Student.findOne({ id });
-//   return existingUser;
-// };
-
 // virtual
 studentSchema.virtual("fullName").get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
-});
-
-// middleware "per"
-studentSchema.pre("save", async function (next) {
-  // console.log(this, "pre");
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
-    Number(config.bcrypt_salt_routs)
-  );
-  next();
-});
-
-// middleware "post"
-studentSchema.post("save", function (doc, next) {
-  doc.password = "";
-  next();
 });
 
 // quarry middleware "find"
