@@ -8,8 +8,6 @@ import {
   studentModel,
 } from "./student.interface";
 
-
-
 const userNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -100,9 +98,9 @@ const studentSchema = new Schema<TStudent, studentModel>(
       type: Schema.Types.ObjectId,
       required: [true, "User id is required"],
       unique: true,
-      ref: "User"
+      ref: "User",
     },
-    
+
     name: {
       type: userNameSchema,
       required: [true, "Student name is required"],
@@ -165,10 +163,6 @@ const studentSchema = new Schema<TStudent, studentModel>(
     profileImg: {
       type: String,
       trim: true,
-    },
-    isDeleted: {
-      type: Boolean,
-      default: false,
     },
   },
   {
