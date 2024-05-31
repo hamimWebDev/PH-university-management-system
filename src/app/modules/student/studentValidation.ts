@@ -60,7 +60,7 @@ export const studentSchema = z.object({
           message: "Gender must be either male, female, or other",
         }),
       }),
-      dateOfBirth: z.string().trim().optional(),
+      dateOfBirth: z.string().optional(),
       email: z
         .string()
         .nonempty("Email is required")
@@ -81,6 +81,7 @@ export const studentSchema = z.object({
         .trim(),
       guardian: guardianSchema,
       localGuardian: localGuardianSchema,
+      admissionSemester: z.string(),
       profileImg: z.string().trim().optional(),
     }),
   }),
