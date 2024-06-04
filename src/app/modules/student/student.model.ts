@@ -7,6 +7,8 @@ import {
   TUserName,
   studentModel,
 } from "./student.interface";
+import { AppError } from "../../errors/AppErrors";
+import httpStatus from "http-status";
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -163,6 +165,14 @@ const studentSchema = new Schema<TStudent, studentModel>(
       type: Schema.Types.ObjectId,
       ref: "AcademicSemester",
     },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicDepartment",
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
     profileImg: {
       type: String,
       trim: true,
@@ -185,6 +195,7 @@ studentSchema.statics.isUserExist = async function (id: string) {
 studentSchema.virtual("fullName").get(function () {
   return `${this.name.firstName} ${this.name.middleName} ${this.name.lastName}`;
 });
+
 
 // quarry middleware "find"
 studentSchema.pre("find", function (next) {
