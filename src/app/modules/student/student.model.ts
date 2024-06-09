@@ -7,8 +7,7 @@ import {
   TUserName,
   studentModel,
 } from "./student.interface";
-import { AppError } from "../../errors/AppErrors";
-import httpStatus from "http-status";
+
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -198,6 +197,7 @@ studentSchema.virtual("fullName").get(function () {
 
 
 // quarry middleware "find"
+
 studentSchema.pre("find", function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
@@ -207,6 +207,7 @@ studentSchema.pre("findOne", function (next) {
   this.find({ isDeleted: { $ne: true } });
   next();
 });
+
 studentSchema.pre("aggregate", function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();

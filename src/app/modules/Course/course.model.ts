@@ -1,6 +1,9 @@
 import { Schema, model } from "mongoose";
-import { TCourse, TCoursefaculty, TPreRequisiteCourses } from "./course.interface";
-
+import {
+  TCourse,
+  TCoursefaculty,
+  TPreRequisiteCourses,
+} from "./course.interface";
 
 const preRequisiteCoursesSchema = new Schema<TPreRequisiteCourses>(
   {
@@ -67,6 +70,22 @@ const courseFacultySchema = new Schema<TCoursefaculty>({
     },
   ],
 });
+
+// quarry middleware "find"
+// courseSchema.pre("find", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+
+// courseSchema.pre("find", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
+
+// courseSchema.pre("aggregate", function (next) {
+//   this.pipeline().unshift({ $match: { isDeleted: { $ne: false } } });
+//   next();
+// });
 
 export const CourseFaculty = model<TCoursefaculty>(
   "CourseFaculty",
