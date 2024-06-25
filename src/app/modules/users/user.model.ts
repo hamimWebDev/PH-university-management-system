@@ -13,10 +13,14 @@ const userSchema = new Schema<TUser, userModel>(
     password: {
       type: String,
       required: true,
+      select: 0,
     },
     needsPasswordChange: {
       type: Boolean,
       default: true,
+    },
+    passwordChangeAt: {
+      type: Date,
     },
     role: {
       type: String,
@@ -40,9 +44,8 @@ const userSchema = new Schema<TUser, userModel>(
 
 // middleware "per"
 userSchema.pre("save", async function (next) {
-  const user = this;
-  user.password = await bcrypt.hash(
-    user.password,
+  this.password = await bcrypt.hash(
+    this.password,
     Number(config.bcrypt_salt_routs)
   );
   next();
@@ -55,7 +58,7 @@ userSchema.post("save", function (doc, next) {
 });
 
 userSchema.statics.isUserExistByCustomId = async function (id: string) {
-  return await User.findOne({ id });
+  return await User.findOne({ id }).select("+password");
 };
 
 userSchema.statics.isPasswordMashed = async function (
@@ -63,6 +66,15 @@ userSchema.statics.isPasswordMashed = async function (
   hashPassword: string
 ) {
   return await bcrypt.compare(password, hashPassword);
+};
+
+userSchema.statics.isJwtIssuedAfterPasswordChanged = function (
+  passwordChangeTimeTamp: Date,
+  jwtIssuedTime: number
+) {
+  const passwordChangedTime = new Date(passwordChangeTimeTamp).getTime() / 1000;
+
+  return passwordChangedTime > jwtIssuedTime;
 };
 
 export const User = model<TUser, userModel>("User", userSchema);

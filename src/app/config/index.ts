@@ -10,4 +10,5 @@ export default {
   bcrypt_salt_routs: process.env.BCRYPT_SALT_ROUTS,
   default_password: process.env.DEFAULT_PASS,
   jwt_secret: process.env.JWT_SECRET,
+  jwt_secret2: process.env.JWT_SECRET2,
 };
