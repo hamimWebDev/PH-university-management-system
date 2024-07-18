@@ -13,15 +13,18 @@ export const auth = (...requiredRoles: TUserRole[]) => {
     if (!token) {
       throw new AppError(
         httpStatus.UNAUTHORIZED,
-        "You are sending an invalid authorization token"
+        "please send a authorization token"
       );
     }
 
-    const decoded = jwt.verify(
-      token,
-      config.jwt_secret as string
-    ) as JwtPayload;
-    req.user = decoded;
+    let decoded;
+
+    try {
+      decoded = jwt.verify(token, config.jwt_secret as string) as JwtPayload;
+      req.user = decoded;
+    } catch {
+      throw new AppError(httpStatus.UNAUTHORIZED, "Expired token");
+    }
 
     // Example usage of 'role'
     const { role, userId, iat } = decoded;
@@ -47,7 +50,7 @@ export const auth = (...requiredRoles: TUserRole[]) => {
     ) {
       throw new AppError(httpStatus.NOT_FOUND, "You are not authorized!");
     }
-    
+
     if (requiredRoles && !requiredRoles.includes(role)) {
       throw new AppError(httpStatus.UNAUTHORIZED, "You are not authorized!");
     } else {

@@ -6,7 +6,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import bcrypt from "bcrypt";
 
-
 const loginUser = async (payload: TLoginUser) => {
   const isUserExist = await User?.isUserExistByCustomId(payload?.id);
   if (await !User.isUserExistByCustomId(payload?.id)) {

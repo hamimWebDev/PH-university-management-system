@@ -7,7 +7,7 @@ import { FacultySearchableFields } from "./faculty.constant";
 import { TFaculty } from "./faculty.interface";
 import { AppError } from "../../errors/AppErrors";
 import { User } from "../users/user.model";
-import { object } from "zod";
+
 
 const getAllFacultiesFromDB = async (query: Record<string, unknown>) => {
   const facultyQuery = new QueryBuilder(

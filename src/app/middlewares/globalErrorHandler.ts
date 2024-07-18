@@ -1,5 +1,5 @@
-import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
-import { ZodError, ZodIssue } from "zod";
+import { ErrorRequestHandler } from "express";
+import { ZodError } from "zod";
 import { TErrorSources } from "../interface/error";
 import config from "../config";
 import handleZodError from "../errors/handleZodError";
@@ -8,12 +8,7 @@ import handleCastError from "../errors/handleCastError";
 import handleDuplicateError from "../errors/handleDuplicateError";
 import { AppError } from "../errors/AppErrors";
 
-export const globalErrorHandler: ErrorRequestHandler = (
-  err,
-  req,
-  res,
-  next
-) => {
+export const globalErrorHandler: ErrorRequestHandler = (err, req, res) => {
   // set default value
   let statusCode = 500;
   let message = "Something went wrong!";
